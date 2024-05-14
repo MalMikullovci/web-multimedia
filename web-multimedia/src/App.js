@@ -5,16 +5,19 @@ import Footer from './components/footer';
 import Banner from './components/Banner'; // Import the Banner component
 import { apiKey, apiUrl } from './config';
 import React, { useState, useEffect } from 'react';
-
+import MySwiper from './components/slider';
 function App() {
   const [movies, setMovies] = useState([]);
 
-  useEffect(() => {
+   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        const response = await fetch(`${apiUrl}/movie/popular?api_key=${apiKey}`);
+        const response = await fetch('https://api.themoviedb.org/3/movie/popular?api_key=f4602c2c330d0e8a431a05eada3f7380&language=en-US&page=1');
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
         const data = await response.json();
-        setMovies(data.results);
+        setMovies(data.results); // Assuming the API response has a 'results' array
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -26,9 +29,8 @@ function App() {
   return (
     <>
       <Navbar />
-      <div className="h-56 sm:h-64 xl:h-80 2xl:h-96">
-        <Banner movies={movies} /> {/* Replace Slider with Banner */}
-      </div>
+      <MySwiper />
+      <Banner movies={movies} />
       <Footer />
     </>
   );

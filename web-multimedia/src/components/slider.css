@@ -1,0 +1,10 @@
+.swiper-container {
+    width: 100%;
+    height: auto; /* Make the height auto to adjust according to the image */
+  }
+  
+  .swiper-image {
+    width: 100%; /* Make the image take the full width of its container */
+    height: auto; /* Ensure the image maintains its aspect ratio */
+  }
+  
