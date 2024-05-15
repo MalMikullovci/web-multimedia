@@ -1,15 +1,16 @@
-// App.js
-import './App.css';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Navbar from './components/navbar';
 import Footer from './components/footer';
-import Banner from './components/Banner'; // Import the Banner component
-import { apiKey, apiUrl } from './config';
-import React, { useState, useEffect } from 'react';
+import Banner from './components/Banner';
+import MovieDetails from './components/movieDetails';
 import MySwiper from './components/slider';
+import './App.css';
+
 function App() {
   const [movies, setMovies] = useState([]);
 
-   useEffect(() => {
+  useEffect(() => {
     const fetchMovies = async () => {
       try {
         const response = await fetch('https://api.themoviedb.org/3/movie/popular?api_key=f4602c2c330d0e8a431a05eada3f7380&language=en-US&page=1');
@@ -17,7 +18,7 @@ function App() {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        setMovies(data.results); // Assuming the API response has a 'results' array
+        setMovies(data.results);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -27,12 +28,18 @@ function App() {
   }, []);
 
   return (
-    <>
+    <Router>
       <Navbar />
-      <MySwiper />
-      <Banner movies={movies} />
-      <Footer />
-    </>
+      <Routes>
+        <Route path="/" element={
+          <>
+            <MySwiper />
+            <Banner movies={movies} />
+          </>
+        } />
+        <Route path="/movie/:id" element={<MovieDetails />} />
+      </Routes>
+    </Router>
   );
 }
 
