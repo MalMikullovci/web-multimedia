@@ -4,21 +4,31 @@ import Navbar from './components/navbar';
 import Footer from './components/footer';
 import Banner from './components/Banner';
 import MovieDetails from './components/movieDetails';
+import ShowDetails from './components/showDetails';
 import MySwiper from './components/slider';
+import Shows from './components/Shows';
+import Pagination from './components/Pagination';
 import './App.css';
 
 function App() {
   const [movies, setMovies] = useState([]);
+  const [shows, setShows] = useState([]);
+  const [moviePage, setMoviePage] = useState(1);
+  const [showPage, setShowPage] = useState(1);
 
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        const response = await fetch('https://api.themoviedb.org/3/movie/popular?api_key=f4602c2c330d0e8a431a05eada3f7380&language=en-US&page=1');
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+        let allMovies = [];
+        for (let page = 1; page <= 3; page++) {
+          const response = await fetch(`https://api.themoviedb.org/3/movie/popular?api_key=f4602c2c330d0e8a431a05eada3f7380&language=en-US&page=${page}`);
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          const data = await response.json();
+          allMovies = allMovies.concat(data.results);
         }
-        const data = await response.json();
-        setMovies(data.results);
+        setMovies(allMovies);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -27,18 +37,50 @@ function App() {
     fetchMovies();
   }, []);
 
+  useEffect(() => {
+    const fetchShows = async () => {
+      try {
+        let allShows = [];
+        for (let page = 1; page <= 3; page++) {
+          const response = await fetch(`https://api.themoviedb.org/3/tv/popular?api_key=f4602c2c330d0e8a431a05eada3f7380&language=en-US&page=${page}`);
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          const data = await response.json();
+          allShows = allShows.concat(data.results);
+        }
+        setShows(allShows);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchShows();
+  }, []);
+
   return (
     <Router>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={
-          <>
-            <MySwiper />
-            <Banner movies={movies} />
-          </>
-        } />
-        <Route path="/movie/:id" element={<MovieDetails />} />
-      </Routes>
+      <div className="app-container min-h-screen flex flex-col"> {/* Added flexbox container */}
+        <Navbar />
+        <Routes>
+          <Route path="/" element={
+            <>
+              <MySwiper />
+              <Banner movies={movies.slice((moviePage - 1) * 24, moviePage * 24)} />
+              <div className="bg-gray-900 p-4 rounded-md">
+                <Pagination page={moviePage} setPage={setMoviePage} totalItems={movies.length} itemsPerPage={24} />
+              </div>
+              <Shows shows={shows.slice((showPage - 1) * 24, showPage * 24)} />
+              <div className="bg-gray-900 p-4 rounded-md">
+                <Pagination page={showPage} setPage={setShowPage} totalItems={shows.length} itemsPerPage={24} />
+              </div>
+            </>
+          } />
+          <Route path="/movie/:id" element={<MovieDetails />} />
+          <Route path="/show/:id" element={<ShowDetails />} />
+        </Routes>
+        <Footer /> {/* Footer placed inside the flex container */}
+      </div>
     </Router>
   );
 }

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 
 const MovieDetails = () => {
   const { id } = useParams();
@@ -7,6 +7,7 @@ const MovieDetails = () => {
   const [similarMovies, setSimilarMovies] = useState([]);
   const [budget, setBudget] = useState(null);
   const [revenue, setRevenue] = useState(null);
+  const [trailer, setTrailer] = useState(null);
 
   useEffect(() => {
     const fetchMovieDetails = async () => {
@@ -35,7 +36,8 @@ const MovieDetails = () => {
         setMovie({
           ...movieData,
           director: director ? director.name : "Unknown",
-          cast: cast.join(', ') // Joining cast names into a comma-separated string
+          cast: cast.join(', '), // Joining cast names into a comma-separated string
+          media_type: "Movie" // Manually setting media_type as "Movie"
         });
 
         // Fetch similar movies
@@ -46,8 +48,17 @@ const MovieDetails = () => {
         const similarData = await similarResponse.json();
         setSimilarMovies(similarData.results.slice(0, 4)); // Limit to 4 similar movies
 
+        // Fetch movie videos to get the trailer
+        const videosResponse = await fetch(`https://api.themoviedb.org/3/movie/${id}/videos?api_key=f4602c2c330d0e8a431a05eada3f7380&language=en-US`);
+        if (!videosResponse.ok) {
+          throw new Error(`HTTP error! status: ${videosResponse.status}`);
+        }
+        const videosData = await videosResponse.json();
+        const trailerData = videosData.results.find(video => video.type === 'Trailer' && video.site === 'YouTube');
+        setTrailer(trailerData ? `https://www.youtube.com/embed/${trailerData.key}` : null);
+
         // Fetch movie details again to get budget and revenue
-        const detailsResponse = await fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=f4602c2c330d0e8a431a05eada3f7380&language=en-US&append_to_response=budget,revenue`);
+        const detailsResponse = await fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=f4602c2c330d0e8a431a05eada3f7380&language=en-US`);
         if (!detailsResponse.ok) {
           throw new Error(`HTTP error! status: ${detailsResponse.status}`);
         }
@@ -66,48 +77,78 @@ const MovieDetails = () => {
     return <div>Loading...</div>;
   }
 
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+    }).format(amount);
+  };
+
   return (
     <div className="bg-gray-900 text-white p-10">
-      <div className="flex flex-col md:flex-row items-center md:items-start">
+      <div className="flex flex-col md:flex-row items-start">
         <img
           className="w-full md:w-1/3 rounded-lg shadow-md"
           src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
           alt={`${movie.title} Poster`}
         />
-        <div className="md:ml-10 mt-6 md:mt-0">
+        <div className="md:ml-10 mt-6 md:mt-0 flex-1">
           <h2 className="text-3xl font-bold">{movie.title}</h2>
-          <p className="mt-2 text-lg"><span className="bg-blue-600 px-2 py-1 rounded-md">HD</span> ⭐{movie.vote_average} {movie.release_date.split('-')[0]} {movie.runtime} min</p>
+          <p className="mt-2 text-lg flex items-center space-x-2">
+            <span className="bg-blue-600 px-2 py-1 rounded-md">HD</span>
+            <span>⭐{movie.vote_average}</span>
+            <span>{movie.release_date.split('-')[0]}</span>
+            <span>{movie.runtime} min</span>
+          </p>
+          <p>{movie.tagline}</p>
           <p className="mt-4">{movie.overview}</p>
-          <div className="mt-4">
-            <p><strong>Type:</strong> {movie.media_type}</p>
+          <div className="mt-4 space-y-2">
+            <p><strong>Type:</strong> {movie.media_type}</p> {/* Media type should now be correctly displayed */}
             <p><strong>Genre:</strong> {movie.genres.map((genre) => genre.name).join(', ')}</p>
             <p><strong>Release:</strong> {movie.release_date}</p>
             <p><strong>Director:</strong> {movie.director}</p>
             <p><strong>Cast:</strong> {movie.cast}</p>
-            <p><strong>Tags:</strong> {movie.tagline}</p>
-            <p><strong>Budget:</strong> ${budget}</p>
-            <p><strong>Revenue:</strong> ${revenue}</p>
+            {budget !== null && (
+              <p><strong>Budget:</strong> {formatCurrency(budget)}</p>
+            )}
+            {revenue !== null && (
+              <p><strong>Revenue:</strong> {formatCurrency(revenue)}</p>
+            )}
           </div>
- 
+          {trailer && (
+            <div className="mt-4">
+              <h3 className="text-xl font-bold">Trailer</h3>
+              <div className="aspect-w-16 aspect-h-9">
+                <iframe
+                  width="560"
+                  height="315"
+                  src={trailer}
+                  title="YouTube video player"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                ></iframe>
+              </div>
+            </div>
+          )}
         </div>
       </div>
-      <div className="mt-4">
-            <h3 className="text-xl font-bold">Similar Movies</h3>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {similarMovies.map(similarMovie => (
-                <div key={similarMovie.id} className="flex flex-col items-center">
-                  <img
-                    className="w-32 h-48 object-cover rounded-md shadow-md"
-                    src={`https://image.tmdb.org/t/p/w500${similarMovie.poster_path}`}
-                    alt={`${similarMovie.title} Poster`}
-                  />
-                  <p className="mt-2 text-lg text-center">{similarMovie.title}</p>
-                </div>
-              ))}
-            </div>
-          </div>
+      <div className="mt-10">
+        <h3 className="text-xl font-bold mb-4">Similar Movies</h3>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {similarMovies.map(similarMovie => (
+            <Link to={`/movie/${similarMovie.id}`} key={similarMovie.id} className="flex flex-col items-center">
+              <img
+                className="w-32 h-48 object-cover rounded-md shadow-md"
+                src={`https://image.tmdb.org/t/p/w500${similarMovie.poster_path}`}
+                alt={`${similarMovie.title} Poster`}
+              />
+              <p className="mt-2 text-lg text-center">{similarMovie.title}</p>
+            </Link>
+          ))}
+        </div>
+      </div>
     </div>
-    
   );
 };
 
