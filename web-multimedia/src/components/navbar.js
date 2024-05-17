@@ -1,4 +1,6 @@
+// src/components/navbar.js
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -12,15 +14,15 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex justify-between items-center">
           <div className="flex-shrink-0">
-            <a href="/" className="text-white text-xl font-bold">Movie Project</a>
+            <Link to="/" className="text-white text-xl font-bold">Movie Project</Link>
           </div>
           <div className="hidden md:block">
             <ul className="flex space-x-4">
-              <li><a href="/" className="text-white hover:text-gray-300">Home</a></li>
-              <li><a href="/" className="text-white hover:text-gray-300">Movies</a></li>
-              <li><a href="/" className="text-white hover:text-gray-300">TV Shows</a></li>
-              <li><a href="/" className="text-white hover:text-gray-300">About</a></li>
-              <li><a href="/" className="text-white hover:text-gray-300">Contact</a></li>
+              <li><Link to="/" className="text-white hover:text-gray-300">Home</Link></li>
+              <li><Link to="/movies" className="text-white hover:text-gray-300">Movies</Link></li>
+              <li><Link to="/tv-shows" className="text-white">TV Shows</Link></li>
+              <li><Link to="/" className="text-white hover:text-gray-300">About</Link></li>
+              <li><Link to="/" className="text-white hover:text-gray-300">Contact</Link></li>
             </ul>
           </div>
           <div className="md:hidden">
@@ -31,18 +33,6 @@ const Navbar = () => {
             </button>
           </div>
         </div>
-        {/* Responsive menu */}
-        {isOpen && (
-          <div className="md:hidden mt-2">
-            <ul className="flex flex-col space-y-2">
-              <li><a href="/" className="text-white hover:text-gray-300">Home</a></li>
-              <li><a href="/" className="text-white hover:text-gray-300">Movies</a></li>
-              <li><a href="/" className="text-white hover:text-gray-300">TV Shows</a></li>
-              <li><a href="/" className="text-white hover:text-gray-300">About</a></li>
-              <li><a href="/" className="text-white hover:text-gray-300">Contact</a></li>
-            </ul>
-          </div>
-        )}
       </div>
     </nav>
   );

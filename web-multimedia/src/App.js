@@ -1,3 +1,4 @@
+// src/App.js
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Navbar from './components/navbar';
@@ -8,7 +9,9 @@ import ShowDetails from './components/showDetails';
 import MySwiper from './components/slider';
 import Shows from './components/Shows';
 import Pagination from './components/Pagination';
+import Movies from './components/Movies';
 import './App.css';
+import TVShows from './components/TVShows';
 
 function App() {
   const [movies, setMovies] = useState([]);
@@ -20,7 +23,7 @@ function App() {
     const fetchMovies = async () => {
       try {
         let allMovies = [];
-        for (let page = 1; page <= 3; page++) {
+        for (let page = 1; page <= 5; page++) {
           const response = await fetch(`https://api.themoviedb.org/3/movie/popular?api_key=f4602c2c330d0e8a431a05eada3f7380&language=en-US&page=${page}`);
           if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -60,7 +63,7 @@ function App() {
 
   return (
     <Router>
-      <div className="app-container min-h-screen flex flex-col"> {/* Added flexbox container */}
+      <div className="app-container min-h-screen flex flex-col">
         <Navbar />
         <Routes>
           <Route path="/" element={
@@ -76,10 +79,12 @@ function App() {
               </div>
             </>
           } />
+          <Route path="/movies" element={<Movies movies={movies} />} />
           <Route path="/movie/:id" element={<MovieDetails />} />
+          <Route path="/tv-shows" element={<TVShows shows={shows} />} />
           <Route path="/show/:id" element={<ShowDetails />} />
         </Routes>
-        <Footer /> {/* Footer placed inside the flex container */}
+        <Footer />
       </div>
     </Router>
   );
