@@ -179,12 +179,15 @@ const MovieDetails = () => {
         <Slider {...sliderSettings}>
           {similarMovies.map(similarMovie => (
             <div key={similarMovie.id} className="flex flex-col items-center px-2 cursor-pointer" >
+              <Link to={`/movie/${similarMovie.id}`}>
+
               <img
                 className="w-full h-48 object-cover rounded-md shadow-md"
                 src={`https://image.tmdb.org/t/p/w500${similarMovie.backdrop_path}`}
                 alt={`${similarMovie.title} Poster`}
               />
               <p className="mt-2 text-lg text-center">{similarMovie.title}</p>
+        </Link>
             </div>
           ))}
         </Slider>
