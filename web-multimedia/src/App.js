@@ -1,6 +1,6 @@
-// src/App.js
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import Navbar from './components/navbar';
 import Footer from './components/footer';
 import Banner from './components/Banner';
@@ -12,6 +12,7 @@ import Pagination from './components/Pagination';
 import Movies from './components/Movies';
 import './App.css';
 import TVShows from './components/TVShows';
+import AboutPage from './components/about';
 
 function App() {
   const [movies, setMovies] = useState([]);
@@ -68,7 +69,7 @@ function App() {
         <Routes>
           <Route path="/" element={
             <>
-              <MySwiper />
+              <MySwiper movies={movies} />
               <Banner movies={movies.slice((moviePage - 1) * 24, moviePage * 24)} />
               <div className="bg-gray-900 p-4 rounded-md">
                 <Pagination page={moviePage} setPage={setMoviePage} totalItems={movies.length} itemsPerPage={24} />
@@ -83,6 +84,7 @@ function App() {
           <Route path="/movie/:id" element={<MovieDetails />} />
           <Route path="/tv-shows" element={<TVShows shows={shows} />} />
           <Route path="/show/:id" element={<ShowDetails />} />
+          <Route path="/aboutus" element={<AboutPage />} />
         </Routes>
         <Footer />
       </div>

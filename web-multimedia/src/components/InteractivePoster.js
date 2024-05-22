@@ -2,58 +2,53 @@ import React, { useEffect, useRef } from 'react';
 import * as PIXI from 'pixi.js';
 
 const InteractivePoster = ({ image }) => {
-  const pixiContainerRef = useRef(null);
+  const pixiContainer = useRef(null);
   const appRef = useRef(null);
+  const loader = new PIXI.Loader();
 
   useEffect(() => {
-    if (!pixiContainerRef.current) return;
+    // Initialize the PixiJS Application
+    const app = new PIXI.Application();
+    appRef.current = app;
+    // Append the view (canvas) to the DOM
+    pixiContainer.current.appendChild(app.view);
 
-    console.log('Creating PIXI application');
+    // Function to load the texture
+    const loadTexture = (url) => {
+      loader.add(url).load(() => {
+        const texture = loader.resources[url].texture;
+        const sprite = new PIXI.Sprite(texture);
+        sprite.interactive = true;
+        sprite.buttonMode = true;
 
-    try {
-      // Create PIXI application
-      appRef.current = new PIXI.Application({
-        view: pixiContainerRef.current,
-        width: 300, // Set width as needed
-        height: 450, // Set height as needed
-        backgroundColor: 0x1099bb, // Set background color here
+        sprite.on('pointerover', () => {
+          sprite.scale.set(1.1);
+        });
+        sprite.on('pointerout', () => {
+          sprite.scale.set(1);
+        });
+
+        sprite.anchor.set(0.5);
+        sprite.x = app.screen.width / 2;
+        sprite.y = app.screen.height / 2;
+
+        app.stage.addChild(sprite);
       });
+    };
 
-      console.log('PIXI Application created:', appRef.current);
-
-      if (!image) {
-        console.error('No image provided');
-        return;
-      }
-
-      console.log('Creating texture and sprite');
-
-      const texture = PIXI.Texture.from(image);
-      console.log('Texture created:', texture);
-
-      const sprite = new PIXI.Sprite(texture);
-      console.log('Sprite created:', sprite);
-
-      // Set sprite properties
-      sprite.width = appRef.current.screen.width;
-      sprite.height = appRef.current.screen.height;
-
-      // Add sprite to the PIXI application stage
-      appRef.current.stage.addChild(sprite);
-
-      console.log('PIXI application created');
-
-      // Cleanup function to destroy PIXI application when component unmounts
-      return () => {
-        console.log('Destroying PIXI application');
-        appRef.current.destroy(true, { children: true });
-      };
-    } catch (error) {
-      console.error('Error creating PIXI application:', error);
+    // Load the image if provided
+    if (image) {
+      loadTexture(image);
     }
+
+    // Cleanup on unmount
+    return () => {
+      app.destroy(true, true);
+      loader.destroy();
+    };
   }, [image]);
 
-  return <div ref={pixiContainerRef}></div>;
+  return <div ref={pixiContainer}></div>;
 };
 
 export default InteractivePoster;
