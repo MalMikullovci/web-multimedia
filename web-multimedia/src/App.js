@@ -13,6 +13,7 @@ import Movies from './components/Movies';
 import './App.css';
 import TVShows from './components/TVShows';
 import AboutPage from './components/about';
+import Contact from './components/contact';
 
 function App() {
   const [movies, setMovies] = useState([]);
@@ -85,6 +86,8 @@ function App() {
           <Route path="/tv-shows" element={<TVShows shows={shows} />} />
           <Route path="/show/:id" element={<ShowDetails />} />
           <Route path="/aboutus" element={<AboutPage />} />
+          <Route path="/contact" element={<Contact />} />
+
         </Routes>
         <Footer />
       </div>

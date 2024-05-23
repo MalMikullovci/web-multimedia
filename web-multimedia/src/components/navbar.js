@@ -22,7 +22,7 @@ const Navbar = () => {
               <li><Link to="/movies" className="text-white hover:text-gray-300">Movies</Link></li>
               <li><Link to="/tv-shows" className="text-white">TV Shows</Link></li>
               <li><Link to="/aboutus" className="text-white hover:text-gray-300">About</Link></li>
-              <li><Link to="/" className="text-white hover:text-gray-300">Contact</Link></li>
+              <li><Link to="/contact" className="text-white hover:text-gray-300">Contact</Link></li>
             </ul>
           </div>
           <div className="md:hidden">

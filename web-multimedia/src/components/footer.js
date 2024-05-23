@@ -9,7 +9,7 @@ const Footer = () => {
           <ul className="flex space-x-4">
             <li><a href="#" className="hover:text-gray-300">Privacy Policy</a></li>
             <li><a href="#" className="hover:text-gray-300">Terms of Service</a></li>
-            <li><a href="#" className="hover:text-gray-300">Contact Us</a></li>
+            <li><a href="/contact" className="hover:text-gray-300">Contact Us</a></li>
           </ul>
         </div>
       </div>
