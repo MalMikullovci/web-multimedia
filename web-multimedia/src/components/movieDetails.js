@@ -123,8 +123,6 @@ const MovieDetails = () => {
     ]
   };
 
- 
-
   return (
     <div className="bg-gray-900 text-white p-10">
       <div className="flex flex-col md:flex-row items-start">
@@ -178,16 +176,15 @@ const MovieDetails = () => {
         <h3 className="text-xl font-bold mb-4">Similar Movies</h3>
         <Slider {...sliderSettings}>
           {similarMovies.map(similarMovie => (
-            <div key={similarMovie.id} className="flex flex-col items-center px-2 cursor-pointer" >
+            <div key={similarMovie.id} className="flex flex-col items-center px-2 cursor-pointer">
               <Link to={`/movie/${similarMovie.id}`}>
-
-              <img
-                className="w-full h-48 object-cover rounded-md shadow-md"
-                src={`https://image.tmdb.org/t/p/w500${similarMovie.backdrop_path}`}
-                alt={`${similarMovie.title} Poster`}
-              />
-              <p className="mt-2 text-lg text-center">{similarMovie.title}</p>
-        </Link>
+                <img
+                  className="w-full h-48 object-cover rounded-md shadow-md"
+                  src={`https://image.tmdb.org/t/p/w500${similarMovie.backdrop_path}`}
+                  alt={`${similarMovie.title} Poster`}
+                />
+                <p className="mt-2 text-lg text-center">{similarMovie.title}</p>
+              </Link>
             </div>
           ))}
         </Slider>
