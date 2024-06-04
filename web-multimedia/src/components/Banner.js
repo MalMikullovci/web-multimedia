@@ -8,58 +8,127 @@ import fav4Poster from '../images/arrival.jpg';
 import fav5Poster from '../images/donnie.jpg';
 import fav6Poster from '../images/dun2.jpg';
 import fav7Poster from '../images/godzilla.jpg';
+import fav8Poster from '../images/pulp.jpg';
+import fav9Poster from '../images/godzilla2.jpg';
+import fav10Poster from '../images/inception.jpg';
+import fav11Poster from '../images/gravity.jpg';
+import fav12Poster from '../images/mamunat.jpg';
+import fav13Poster from '../images/maxi-i-terbuar.jpg';
+import fav14Poster from '../images/matriksi.jpg';
+import fav15Poster from '../images/ryangoslingi.jpg';
+
+
+
+
 
 const Banner = ({ movies = [] }) => {
   const favoriteMovies = [
     {
-      id: 'fav1',
+      id: '929590',
       title: 'Civil war',
       poster_path: fav1Poster,
       release_date: '2023-01-01',
       runtime: 120,
     },
     {
-      id: 'fav3',
-      title: 'Your Favorite Movie 2',
+      id: '414906',
+      title: 'The Batman',
       poster_path: fav2Poster,
       release_date: '2022-01-01',
       runtime: 130,
     },
     {
-      id: 'fav4',
-      title: 'Your Favorite Movie 2',
+      id: '62',
+      title: '2001:a Space Oddysey',
       poster_path: fav3Poster,
       release_date: '2022-01-01',
       runtime: 130,
     },
     {
-      id: 'fav5',
-      title: 'Your Favorite Movie 2',
+      id: '329865',
+      title: 'Arrival',
       poster_path: fav4Poster,
       release_date: '2022-01-01',
       runtime: 130,
     },
     {
-      id: 'fav6',
-      title: 'Your Favorite Movie 2',
+      id: '141',
+      title: 'Donnie Darko',
       poster_path: fav5Poster,
       release_date: '2022-01-01',
       runtime: 130,
     },
     {
-      id: 'fav7',
-      title: 'Your Favorite Movie 2',
+      id: '693134',
+      title: 'Dune 2 ',
       poster_path: fav6Poster,
       release_date: '2022-01-01',
       runtime: 130,
     },
     {
-      id: 'fav8',
-      title: 'Your Favorite Movie 2',
+      id: '823464',
+      title: 'Godzilla x Kong',
       poster_path: fav7Poster,
       release_date: '2022-01-01',
       runtime: 130,
     },
+    {
+      id: '680',
+      title: 'Pulp Fiction',
+      poster_path: fav8Poster,
+      release_date: '2022-01-01',
+      runtime: 130,
+    },
+    {
+      id: '940721',
+      title: 'Godzilla:Minus One',
+      poster_path: fav9Poster,
+      release_date: '2022-01-01',
+      runtime: 130,
+    },
+    {
+      id: '27205',
+      title: 'Inception',
+      poster_path: fav10Poster,
+      release_date: '2022-01-01',
+      runtime: 130,
+    },
+    {
+      id: '49047',
+      title: 'Gravity',
+      poster_path: fav11Poster,
+      release_date: '2022-01-01',
+      runtime: 130,
+    },
+    {
+      id: '653346',
+      title: 'Kingdom of the Planet of the Apes',
+      poster_path: fav12Poster,
+      release_date: '2022-01-01',
+      runtime: 130,
+    },
+    {
+      id: '786892',
+      title: 'Furiosa',
+      poster_path: fav13Poster,
+      release_date: '2022-01-01',
+      runtime: 130,
+    },
+    {
+      id: '603',
+      title: 'The Matrix',
+      poster_path: fav14Poster,
+      release_date: '2022-01-01',
+      runtime: 130,
+    },
+    {
+      id: '746036',
+      title: 'The Fall Guy',
+      poster_path: fav15Poster,
+      release_date: '2022-01-01',
+      runtime: 130,
+    },
+
     
     // Add more favorite movies here...
   ];
