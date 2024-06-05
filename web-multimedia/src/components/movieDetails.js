@@ -18,7 +18,6 @@ import fav12Poster from '../images/mamunat.jpg';
 import fav13Poster from '../images/maxi-i-terbuar.jpg';
 import fav14Poster from '../images/matriksi.jpg';
 import fav15Poster from '../images/ryangoslingi.jpg';
-
 const favoriteMovies = [
   {
     id: '929590',
@@ -67,7 +66,7 @@ const favoriteMovies = [
       { id: 18, name: 'Drama' },
       { id: 878, name: 'Science Fiction' },
     ],
-  },
+  },  
   {
     id: '141',
     title: 'Donnie Darko',
@@ -333,53 +332,52 @@ const MovieDetails = () => {
           <p className="mt-2 text-lg flex items-center space-x-2">
             <span className="bg-blue-600 px-2 py-1 rounded-md">HD</span>
             <span>⭐{movie.vote_average}</span>
-            <span>{movie.release_date.split('-')[0]}</span>
+            <span>{movie.release_date.split("-")[0]}</span>
             <span>{movie.runtime} min</span>
           </p>
           <p>{movie.tagline}</p>
           <p className="mt-4">{movie.overview}</p>
           <div className="mt-4 space-y-2">
-            <p><strong>Type:</strong> {movie.media_type}</p>
-            <p><strong>Genre:</strong> {movie.genres ? movie.genres.map((genre) => genre.name).join(', ') : 'Unknown'}</p>
-            <p><strong>Release:</strong> {movie.release_date}</p>
-            <p><strong>Director:</strong> {movie.director}</p>
-            <p><strong>Cast:</strong> {movie.cast}</p>
-            <p><strong>Budget:</strong> {budget ? formatCurrency(budget) : 'Unknown'}</p>
-            <p><strong>Revenue:</strong> {revenue ? formatCurrency(revenue) : 'Unknown'}</p>
+            <p>
+              <strong>Type:</strong> {movie.media_type}
+            </p>
+            <p>
+              <strong>Genre:</strong>{" "}
+              {movie.genres
+                ? movie.genres.map((genre) => genre.name).join(", ")
+                : "Unknown"}
+            </p>
+            <p>
+              <strong>Release:</strong> {movie.release_date}
+            </p>
+            <p>
+              <strong>Director:</strong> {movie.director}
+            </p>
+            <p>
+              <strong>Cast:</strong> {movie.cast}
+            </p>
+            <p>
+              <strong>Budget:</strong>{" "}
+              {budget ? formatCurrency(budget) : "Unknown"}
+            </p>
+            <p>
+              <strong>Revenue:</strong>{" "}
+              {revenue ? formatCurrency(revenue) : "Unknown"}
+            </p>
           </div>
-          {trailer && (
-            <div className="mt-6">
-              <h3 className="text-2xl font-bold mb-4">Trailer</h3>
-              <div className="aspect-w-16 aspect-h-9">
-                {trailer.includes('youtube') ? (
-                  <iframe
-                    src={trailer}
-                    title="YouTube video player"
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  ></iframe>
-                ) : (
-                  <video controls>
-                    <source src={trailer} type="video/mp4" />
-                    Your browser does not support the video tag.
-                  </video>
-                )}
-              </div>
-            </div>
-          )}
+
         </div>
       </div>
 
       <div className="mt-10">
         <h3 className="text-2xl font-bold mb-4">Similar Movies</h3>
-        <Slider {...sliderSettings}>
+        <Slider {...sliderSettings} className="my-slider">
           {similarMovies.map((similarMovie) => (
-            <div key={similarMovie.id} className="p-2">
+            <div key={similarMovie.id} className="px-2">
               <Link to={`/movie/${similarMovie.id}`}>
                 <img
                   className="w-full h-auto rounded-lg shadow-md"
-                  src={`https://image.tmdb.org/t/p/w500${similarMovie.poster_path}`}
+                  src={`https://image.tmdb.org/t/p/w500${similarMovie.backdrop_path}`}
                   alt={`${similarMovie.title} Poster`}
                 />
               </Link>
