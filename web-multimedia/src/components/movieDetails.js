@@ -214,7 +214,7 @@ const MovieDetails = () => {
       try {
         let movieData;
         let favoriteMovie = favoriteMovies.find(favMovie => favMovie.id === id);
-
+  
         if (favoriteMovie) {
           movieData = favoriteMovie;
           setTrailer(favoriteMovie.trailer_path);
@@ -224,7 +224,7 @@ const MovieDetails = () => {
             throw new Error(`HTTP error! status: ${response.status}`);
           }
           movieData = await response.json();
-
+  
           const videosResponse = await fetch(`https://api.themoviedb.org/3/movie/${id}/videos?api_key=f4602c2c330d0e8a431a05eada3f7380&language=en-US`);
           if (!videosResponse.ok) {
             throw new Error(`HTTP error! status: ${videosResponse.status}`);
@@ -233,30 +233,31 @@ const MovieDetails = () => {
           const trailerData = videosData.results.find(video => video.type === 'Trailer' && video.site === 'YouTube');
           setTrailer(trailerData ? `https://www.youtube.com/embed/${trailerData.key}` : null);
         }
-
+  
         const creditsResponse = await fetch(`https://api.themoviedb.org/3/movie/${id}/credits?api_key=f4602c2c330d0e8a431a05eada3f7380`);
         if (!creditsResponse.ok) {
           throw new Error(`HTTP error! status: ${creditsResponse.status}`);
         }
         const creditsData = await creditsResponse.json();
-
+  
         const director = creditsData.crew.find(member => member.job === "Director");
         const cast = creditsData.cast.slice(0, 6).map(member => member.name);
-
+  
         setMovie({
           ...movieData,
           director: director ? director.name : "Unknown",
           cast: cast.join(', '),
-          media_type: "Movie"
+          media_type: "Movie",
+          poster_path: favoriteMovie ? favoriteMovie.poster_path : (movieData.poster_path ? `https://image.tmdb.org/t/p/w500${movieData.poster_path}` : null)
         });
-
+  
         const similarResponse = await fetch(`https://api.themoviedb.org/3/movie/${id}/similar?api_key=f4602c2c330d0e8a431a05eada3f7380&language=en-US&page=1`);
         if (!similarResponse.ok) {
           throw new Error(`HTTP error! status: ${similarResponse.status}`);
         }
         const similarData = await similarResponse.json();
         setSimilarMovies(similarData.results.slice(0, 8));
-
+  
         const detailsResponse = await fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=f4602c2c330d0e8a431a05eada3f7380&language=en-US`);
         if (!detailsResponse.ok) {
           throw new Error(`HTTP error! status: ${detailsResponse.status}`);
@@ -268,9 +269,10 @@ const MovieDetails = () => {
         console.error('Error fetching movie details:', error);
       }
     };
-
+  
     fetchMovieDetails();
   }, [id]);
+  
 
   if (!movie) {
     return <div>Loading...</div>;
@@ -380,7 +382,8 @@ const MovieDetails = () => {
                   src={`https://image.tmdb.org/t/p/w500${similarMovie.backdrop_path}`}
                   alt={`${similarMovie.title} Poster`}
                 />
-              </Link>
+
+</Link>
               <h4 className="mt-2 text-lg font-bold">{similarMovie.title}</h4>
             </div>
           ))}

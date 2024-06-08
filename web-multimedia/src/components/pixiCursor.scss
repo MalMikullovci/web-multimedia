@@ -1,0 +1,18 @@
+.pixi-cursor-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 9999;
+  }
+  
+  .pixi-cursor {
+    width: 50px; /* Adjust cursor size */
+    height: 50px; /* Adjust cursor size */
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  

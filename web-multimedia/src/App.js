@@ -16,6 +16,7 @@ import AboutPage from './components/about';
 import Contact from './components/contact';
 import EpisodeDetails from './components/episodeDetails';
 import TrailerPage from './components/trailer';
+import PixiCursor from './components/PixiCursor'; // Import the PixiCursor component
 
 function App() {
   const [movies, setMovies] = useState([]);
@@ -68,6 +69,9 @@ function App() {
   return (
     <Router>
       <div className="app-container min-h-screen flex flex-col">
+        {/* Include PixiCursor component */}
+        <PixiCursor />
+
         <Navbar />
         <Routes>
           <Route path="/" element={

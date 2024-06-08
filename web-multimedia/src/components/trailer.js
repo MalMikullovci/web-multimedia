@@ -14,14 +14,14 @@ import fav12Poster from '../images/mamunat.jpg';
 import fav13Poster from '../images/maxi-i-terbuar.jpg';
 import fav14Poster from '../images/matriksi.jpg';
 import fav15Poster from '../images/ryangoslingi.jpg';
-import vid1 from '../videos/Civil War ｜ Official Trailer HD ｜ A24.mp4';
+
 const trailers = [
     {
         id: '929590',
         title: 'Civil war',
         poster_path: fav1Poster,
         release_date: '2023-01-01',
-        trailer_path: vid1,
+        trailer_path: "/videos/Civil War ｜ Official Trailer HD ｜ A24.mp4",
         runtime: 120,
         genres: [
           { id: 28, name: 'Action' },
@@ -155,7 +155,7 @@ const trailers = [
         title: 'Furiosa',
         poster_path: fav13Poster,
         release_date: '2024-01-01',
-        trailer_path: "/videos/Kingdom of the Planet of the Apes ｜ Official Trailer.mp4",
+        trailer_path: "/videos/FURIOSA ： A MAD MAX SAGA ｜ OFFICIAL TRAILER .mp4",
         runtime: 130,
         genres: [
           { id: 28, name: 'Action' },
@@ -201,26 +201,32 @@ const trailers = [
     ];
 
     const TrailerPage = () => {
-        return (
-            <div className="container mx-auto px-4 py-8 bg-gray-900">
-                <h1 className="text-3xl font-bold mb-4 text-white">Trailers</h1>
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                    {trailers.map(trailer => {
-                        console.log("Trailer Path:", trailer.trailer_path);
-                        return (
-                            <div key={trailer.id} className="relative">
-                                <video controls className="w-full h-auto rounded-md shadow-md cursor-pointer">
-                                    <source src={trailer.trailer_path} type="video/mp4" />
-                                    Your browser does not support the video tag.
-                                </video>
-                                <h5 className="mt-2 text-xs font-medium text-gray-300">{trailer.title}</h5>
-                            </div>
-                        );
-                    })}
+      return (
+        <div className="w-full bg-gray-900 py-8">
+          <div className="w-full px-4">
+            <h1 className="text-4xl font-extrabold mb-8 text-white text-center">Movie Trailers</h1>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+              {trailers.map(trailer => (
+                <div key={trailer.id} className="relative bg-gray-800 rounded-lg overflow-hidden shadow-lg transform hover:scale-105 transition-transform duration-300">
+                  <video controls className="w-full h-48 sm:h-64 md:h-48 lg:h-56 rounded-t-lg object-cover">
+                    <source src={trailer.trailer_path} type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
+                  <div className="p-4">
+                    <h5 className="text-lg font-semibold text-gray-200">{trailer.title}</h5>
+                    <p className="text-sm text-gray-400">{new Date(trailer.release_date).toLocaleDateString()}</p>
+                    <div className="flex flex-wrap mt-2">
+                      {trailer.genres.map(genre => (
+                        <span key={genre.id} className="text-xs text-gray-100 bg-gray-700 px-2 py-1 rounded-full mr-2 mb-2">{genre.name}</span>
+                      ))}
+                    </div>
+                  </div>
                 </div>
+              ))}
             </div>
-        );
+          </div>
+        </div>
+      );
     };
-    
     
     export default TrailerPage;
