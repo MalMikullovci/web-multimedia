@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FaPlay } from 'react-icons/fa'; // Import play icon
+import { FaMusic } from 'react-icons/fa'; // Import music note icon
 import { FiPause } from 'react-icons/fi'; // Import pause icon
 
 // Background audio component
@@ -51,12 +51,10 @@ const Navbar = () => {
           <Link to="/trailers" className="hover:text-blue-300 transition duration-300">Trailers</Link>
           <Link to="/aboutus" className="hover:text-blue-300 transition duration-300">About</Link>
           <Link to="/contact" className="hover:text-blue-300 transition duration-300">Contact</Link>
-      <button onClick={toggleAudio} className="text-white focus:outline-none">
-            {isPlaying ? <FiPause className="h-6 w-6" /> : <FaPlay className="h-6 w-6" />}
+          <button onClick={toggleAudio} className="text-white focus:outline-none">
+            {isPlaying ? <FiPause className="h-6 w-6" /> : <FaMusic className="h-6 w-6" />}
           </button>
-
         </div>
-        {/* Mobile Menu Button */}
         <div className="md:hidden">
           <button className="text-white focus:outline-none" onClick={toggleMenu}>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="h-8 w-8 fill-current">
@@ -68,10 +66,6 @@ const Navbar = () => {
             </svg>
           </button>
         </div>
-        {/* Play/Pause Button */}
-        <div className="md:flex hidden items-center">
-          
-        </div>
       </div>
       {/* Mobile Menu */}
       {isOpen && (
@@ -82,11 +76,10 @@ const Navbar = () => {
           <Link to="/trailers" className="hover:text-blue-300 transition duration-300">Trailers</Link>
           <Link to="/aboutus" className="block py-2 px-4 bg-gray-800 rounded hover:bg-gray-700">About</Link>
           <Link to="/contact" className="block py-2 px-4 bg-gray-800 rounded hover:bg-gray-700">Contact</Link>
-
         </div>
       )}
+      {/* Background Audio */}
       <BackgroundAudio isPlaying={isPlaying} />
-
     </nav>
   );
 };

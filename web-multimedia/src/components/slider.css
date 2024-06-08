@@ -1,10 +1,64 @@
-.swiper-container {
-    width: 100%;
-    height: auto; /* Make the height auto to adjust according to the image */
-  }
-  
-  .swiper-image {
-    width: 100%; /* Make the image take the full width of its container */
-    height: auto; /* Ensure the image maintains its aspect ratio */
-  }
-  
+.slider-container {
+  position: relative;
+}
+
+.stage-container {
+  margin: 0 auto;
+  text-align: center;
+}
+
+.button-container {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  transform: translateY(-50%);
+}
+
+.arrow-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 24px;
+  color: #333;
+  padding: 10px;
+  transition: color 0.3s ease;
+}
+
+.arrow-button:hover {
+  color: #000;
+}
+
+.tooltip {
+  position: absolute;
+  top: 100%; /* Position below the image */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, 0); /* Adjust for centering */
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 999; /* Ensure tooltip appears above other elements */
+  text-align: center;
+  visibility: hidden; /* Initially hidden */
+  opacity: 0; /* Initially transparent */
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.tooltip.show {
+  visibility: visible; /* Show when the class "show" is added */
+  opacity: 1; /* Fully visible */
+}
+
+.tooltip h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.tooltip p {
+  margin: 5px 0;
+  font-size: 14px;
+  color: #666;
+}
