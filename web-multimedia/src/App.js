@@ -1,65 +1,63 @@
-import React, { useState, useEffect } from 'react';
+import React, { lazy, Suspense, useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import Navbar from './components/navbar';
 import Footer from './components/footer';
-import Banner from './components/Banner';
-import MovieDetails from './components/movieDetails';
-import ShowDetails from './components/showDetails';
-import MySwiper from './components/slider';
-import Shows from './components/Shows';
-import Pagination from './components/Pagination';
-import Movies from './components/Movies';
-import './App.css';
-import TVShows from './components/TVShows';
-import AboutPage from './components/about';
-import Contact from './components/contact';
-import EpisodeDetails from './components/episodeDetails';
-import TrailerPage from './components/trailer';
-import PixiCursor from './components/PixiCursor'; // Import the PixiCursor component
+import PixiCursor from './components/PixiCursor';
+import Preloader from './components/Preloader';
+import BackgroundAudio from './components/BackgroundAudio';
+
+
+// Lazy load components
+const Banner = lazy(() => import('./components/Banner'));
+const MovieDetails = lazy(() => import('./components/movieDetails'));
+const ShowDetails = lazy(() => import('./components/showDetails'));
+const MySwiper = lazy(() => import('./components/slider'));
+const Shows = lazy(() => import('./components/Shows'));
+const Pagination = lazy(() => import('./components/Pagination'));
+const AboutPage = lazy(() => import('./components/about'));
+const Contact = lazy(() => import('./components/contact'));
+const EpisodeDetails = lazy(() => import('./components/episodeDetails'));
+const TrailerPage = lazy(() => import('./components/trailer'));
+
+// Import Movies and TVShows components
+const Movies = lazy(() => import('./components/Movies'));
+const TVShows = lazy(() => import('./components/TVShows'));
 
 function App() {
   const [movies, setMovies] = useState([]);
   const [shows, setShows] = useState([]);
   const [moviePage, setMoviePage] = useState(1);
-  const [showPage, setShowPage] = useState(1);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        let allMovies = [];
-        for (let page = 1; page <= 5; page++) {
-          const response = await fetch(`https://api.themoviedb.org/3/movie/popular?api_key=f4602c2c330d0e8a431a05eada3f7380&language=en-US&page=${page}`);
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-          const data = await response.json();
-          allMovies = allMovies.concat(data.results);
+        const response = await fetch(`https://api.themoviedb.org/3/movie/popular?api_key=f4602c2c330d0e8a431a05eada3f7380&language=en-US&page=${moviePage}`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
         }
-        setMovies(allMovies);
+        const data = await response.json();
+        setMovies(data.results);
+        setLoading(false);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error('Error fetching movies:', error);
       }
     };
 
     fetchMovies();
-  }, []);
+  }, [moviePage]);
 
   useEffect(() => {
     const fetchShows = async () => {
       try {
-        let allShows = [];
-        for (let page = 1; page <= 3; page++) {
-          const response = await fetch(`https://api.themoviedb.org/3/tv/popular?api_key=f4602c2c330d0e8a431a05eada3f7380&language=en-US&page=${page}`);
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-          const data = await response.json();
-          allShows = allShows.concat(data.results);
+        const response = await fetch(`https://api.themoviedb.org/3/tv/popular?api_key=f4602c2c330d0e8a431a05eada3f7380&language=en-US&page=1`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
         }
-        setShows(allShows);
+        const data = await response.json();
+        setShows(data.results);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error('Error fetching shows:', error);
       }
     };
 
@@ -69,34 +67,45 @@ function App() {
   return (
     <Router>
       <div className="app-container min-h-screen flex flex-col">
-        {/* Include PixiCursor component */}
-        <PixiCursor />
+   <BackgroundAudio />
 
-        <Navbar />
-        <Routes>
-          <Route path="/" element={
-            <>
-              <MySwiper movies={movies} />
-              <Banner movies={movies.slice((moviePage - 1) * 24, moviePage * 24)} />
-              <div className="bg-gray-900 p-4 rounded-md">
-                <Pagination page={moviePage} setPage={setMoviePage} totalItems={movies.length} itemsPerPage={24} />
-              </div>
-              <Shows shows={shows.slice((showPage - 1) * 24, showPage * 24)} />
-              <div className="bg-gray-900 p-4 rounded-md">
-                <Pagination page={showPage} setPage={setShowPage} totalItems={shows.length} itemsPerPage={24} />
-              </div>
-            </>
-          } />
-          <Route path="/movies" element={<Movies movies={movies} />} />
-          <Route path="/movie/:id" element={<MovieDetails />} />
-          <Route path="/tv-shows" element={<TVShows shows={shows} />} />
-          <Route path="/show/:id" element={<ShowDetails />} />
-          <Route path="/aboutus" element={<AboutPage />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/show/:showId/season/:seasonNumber/episode/:episodeNumber" component={EpisodeDetails} />
-          <Route path="/trailers" element={<TrailerPage/>} />
-        </Routes>
-        <Footer />
+        <PixiCursor />
+        {loading && <Preloader />}
+        {!loading && (
+          <>
+            <Navbar />
+            <Suspense fallback={<Preloader />}>
+              <Routes>
+                <Route
+                  path="/"
+                  element={
+                    <>
+                      <MySwiper movies={movies} />
+                      <Banner movies={movies.slice((moviePage - 1) * 24, moviePage * 24)} />
+                      <div className="bg-gray-900 p-4 rounded-md">
+                        <Pagination
+                          page={moviePage}
+                          setPage={setMoviePage}
+                          totalItems={movies.length}
+                          itemsPerPage={24}
+                        />
+                      </div>
+                    </>
+                  }
+                />
+                <Route path="/movies" element={<Movies movies={movies} />} />
+                <Route path="/movie/:id" element={<MovieDetails />} />
+                <Route path="/tv-shows" element={<TVShows shows={shows} />} />
+                <Route path="/show/:id" element={<ShowDetails />} />
+                <Route path="/aboutus" element={<AboutPage />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/show/:showId/season/:seasonNumber/episode/:episodeNumber" element={<EpisodeDetails />} />
+                <Route path="/trailers" element={<TrailerPage />} />
+              </Routes>
+            </Suspense>
+            <Footer />
+          </>
+        )}
       </div>
     </Router>
   );

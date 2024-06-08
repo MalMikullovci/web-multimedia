@@ -12,6 +12,7 @@ const PixiCursor = () => {
     x: appSize.width / 2,
     y: appSize.height / 2,
   });
+  const [isCursorVisible, setIsCursorVisible] = useState(true);
   const spriteRef = useRef(null);
 
   const handleResize = () => {
@@ -20,6 +21,13 @@ const PixiCursor = () => {
 
   const handleMouseMove = (event) => {
     setSpritePosition({ x: event.clientX, y: event.clientY });
+    const elementUnderCursor = document.elementFromPoint(event.clientX, event.clientY);
+
+    if (elementUnderCursor && (elementUnderCursor.tagName === 'BUTTON' || elementUnderCursor.tagName === 'A' || elementUnderCursor.tagName === 'INPUT' || elementUnderCursor.tagName === 'TEXTAREA' || elementUnderCursor.classList.contains('pressable'))) {
+      setIsCursorVisible(false);
+    } else {
+      setIsCursorVisible(true);
+    }
   };
 
   useEffect(() => {
@@ -49,6 +57,7 @@ const PixiCursor = () => {
         height: '100vh',
         pointerEvents: 'none',
         zIndex: 1000,
+        display: isCursorVisible ? 'block' : 'none',
       }}
     >
       <Stage

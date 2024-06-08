@@ -5,6 +5,9 @@ const Pagination = ({ page, setPage, totalItems, itemsPerPage }) => {
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   const pageNumbers = [...Array(totalPages).keys()].map(num => num + 1);
 
+  // Ensure at least 3 pages are displayed
+  const displayedPages = Math.max(Math.min(totalPages, 3), 1);
+
   return (
     <div className="pagination flex justify-center my-6 bg-gray-900 p-4 rounded-md">
       <button
@@ -14,7 +17,7 @@ const Pagination = ({ page, setPage, totalItems, itemsPerPage }) => {
       >
         Previous
       </button>
-      {pageNumbers.map(num => (
+      {pageNumbers.slice(0, displayedPages).map(num => (
         <button
           key={num}
           onClick={() => setPage(num)}

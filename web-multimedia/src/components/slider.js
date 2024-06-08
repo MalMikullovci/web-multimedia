@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-import 'swiper/css/scrollbar';
-import './slider.css'; // Import CSS for slider styling
+import './slider.css';
 import { Pagination, Navigation } from 'swiper/modules';
 import { useNavigate } from 'react-router-dom';
+
+import marvelsImage from '../images/marvels.webp';
+import madMaxImage from '../images/mad-max-furiosa.webp';
 
 function MySwiper() {
   const [hoveredIndex, setHoveredIndex] = useState(null);
@@ -21,30 +23,32 @@ function MySwiper() {
     setHoveredIndex(null);
   };
 
-  // Function to fetch movie details by ID
-  const fetchMovieDetails = async (id) => {
+  const fetchMovieDetails = useCallback(async (id) => {
     try {
       const response = await fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=f4602c2c330d0e8a431a05eada3f7380&language=en-US`);
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
       const data = await response.json();
       return data;
     } catch (error) {
       console.error('Error fetching movie details:', error);
     }
-  };
+  }, []);
 
   useEffect(() => {
     const fetchDetailsForMovies = async () => {
-      const movieIds = [609681, 786892]; // IDs of the movies to fetch
+      const movieIds = [609681, 786892];
       const detailsPromises = movieIds.map(id => fetchMovieDetails(id));
       const movieDetails = await Promise.all(detailsPromises);
-      setMovieDetailsList(movieDetails);
+      setMovieDetailsList(movieDetails.filter(Boolean));
     };
-  
+
     fetchDetailsForMovies();
-  }, []);
+  }, [fetchMovieDetails]);
+
+  const localImages = {
+    609681: marvelsImage,
+    786892: madMaxImage,
+  };
 
   return (
     <div className="swiper-container">
@@ -52,9 +56,7 @@ function MySwiper() {
         slidesPerView={1}
         spaceBetween={30}
         loop={true}
-        pagination={{
-          clickable: true,
-        }}
+        pagination={{ clickable: true }}
         navigation={true}
         modules={[Pagination, Navigation]}
         className="mySwiper"
@@ -66,7 +68,15 @@ function MySwiper() {
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
             >
-              <img src={`https://image.tmdb.org/t/p/original${movieDetails?.backdrop_path}`} alt={movieDetails?.title} className="swiper-image rounded-md shadow-md transition-transform duration-300 transform hover:scale-105" />
+              <img
+                src={localImages[movieDetails.id]}
+                alt={movieDetails?.title}
+                className="swiper-image rounded-md shadow-md transition-transform duration-300 transform hover:scale-105"
+                width="1920"
+                height="1080"
+                loading="lazy"
+                fetchpriority="high" // High priority for critical images
+              />
               {hoveredIndex && (
                 <div className="slide-details bg-black bg-opacity-70 absolute bottom-4 left-4 rounded-md p-4 transition-opacity duration-300 opacity-100">
                   <h3 className="movie-title text-white text-4xl font-semibold">{movieDetails?.title}</h3>

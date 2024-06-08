@@ -3,21 +3,21 @@ import { useParams, Link } from 'react-router-dom';
 import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
-import fav1Poster from '../images/civil-war.jpg';
-import fav2Poster from '../images/betmeni.jpg';
-import fav3Poster from '../images/2001.jpg';
-import fav4Poster from '../images/arrival.jpg';
-import fav5Poster from '../images/donnie.jpg';
-import fav6Poster from '../images/dun2.jpg';
-import fav7Poster from '../images/godzilla.jpg';
-import fav8Poster from '../images/pulp.jpg';
-import fav9Poster from '../images/godzilla2.jpg';
-import fav10Poster from '../images/inception.jpg';
-import fav11Poster from '../images/gravity.jpg';
-import fav12Poster from '../images/mamunat.jpg';
-import fav13Poster from '../images/maxi-i-terbuar.jpg';
-import fav14Poster from '../images/matriksi.jpg';
-import fav15Poster from '../images/ryangoslingi.jpg';
+import fav1Poster from '../images/civil-war.webp';
+import fav2Poster from '../images/betmeni.webp';
+import fav3Poster from '../images/2001.webp';
+import fav4Poster from '../images/arrival.webp';
+import fav5Poster from '../images/donnie.webp';
+import fav6Poster from '../images/dun2.webp';
+import fav7Poster from '../images/godzilla.webp';
+import fav8Poster from '../images/pulp.webp';
+import fav9Poster from '../images/godzilla2.webp';
+import fav10Poster from '../images/inception.webp';
+import fav11Poster from '../images/gravity.webp';
+import fav12Poster from '../images/mamunat.webp';
+import fav13Poster from '../images/maxi-i-terbuar.webp';
+import fav14Poster from '../images/matriksi.webp';
+import fav15Poster from '../images/ryangoslingi.webp';
 const favoriteMovies = [
   {
     id: '929590',

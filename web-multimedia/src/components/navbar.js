@@ -1,11 +1,39 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { FaPlay } from 'react-icons/fa'; // Import play icon
+import { FiPause } from 'react-icons/fi'; // Import pause icon
+
+// Background audio component
+const BackgroundAudio = ({ isPlaying }) => {
+  const audioRef = React.useRef(null);
+
+  React.useEffect(() => {
+    const audio = audioRef.current;
+    if (audio) {
+      if (isPlaying) {
+        audio.play().catch(error => {
+          console.error('Failed to play audio:', error);
+        });
+      } else {
+        audio.pause();
+      }
+    }
+  }, [isPlaying]);
+
+  return <audio ref={audioRef} src="/videos/Interstellar Main Theme  Hans Zimmer.mp3" />;
+};
 
 const Navbar = () => {
+  const [isPlaying, setIsPlaying] = useState(false); // State to track if audio is playing
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
+  };
+
+  // Function to toggle audio playback
+  const toggleAudio = () => {
+    setIsPlaying(!isPlaying);
   };
 
   return (
@@ -23,6 +51,10 @@ const Navbar = () => {
           <Link to="/trailers" className="hover:text-blue-300 transition duration-300">Trailers</Link>
           <Link to="/aboutus" className="hover:text-blue-300 transition duration-300">About</Link>
           <Link to="/contact" className="hover:text-blue-300 transition duration-300">Contact</Link>
+      <button onClick={toggleAudio} className="text-white focus:outline-none">
+            {isPlaying ? <FiPause className="h-6 w-6" /> : <FaPlay className="h-6 w-6" />}
+          </button>
+
         </div>
         {/* Mobile Menu Button */}
         <div className="md:hidden">
@@ -36,6 +68,10 @@ const Navbar = () => {
             </svg>
           </button>
         </div>
+        {/* Play/Pause Button */}
+        <div className="md:flex hidden items-center">
+          
+        </div>
       </div>
       {/* Mobile Menu */}
       {isOpen && (
@@ -46,8 +82,11 @@ const Navbar = () => {
           <Link to="/trailers" className="hover:text-blue-300 transition duration-300">Trailers</Link>
           <Link to="/aboutus" className="block py-2 px-4 bg-gray-800 rounded hover:bg-gray-700">About</Link>
           <Link to="/contact" className="block py-2 px-4 bg-gray-800 rounded hover:bg-gray-700">Contact</Link>
+
         </div>
       )}
+      <BackgroundAudio isPlaying={isPlaying} />
+
     </nav>
   );
 };
